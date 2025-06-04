@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Vocacional</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .question {
+      margin-bottom: 25px;
+      padding: 10px;
+      background: #fff;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+    .question p {
+      font-weight: bold;
+    }
+    button {
+      display: block;
+      margin: 30px auto;
+      padding: 12px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #3b82f6;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #2563eb;
+    }
+    #resultado {
+      text-align: center;
+      padding: 20px;
+      background: #e0f2fe;
+      border-radius: 10px;
+      margin-top: 30px;
+      display: none;
+    }
+    canvas {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Test Vocacional</h1>
+
+<div id="quiz">
+  <!-- Preguntas -->
+  <div class="question">
+    <p>1. ¿Qué disfrutas más?</p>
+    <input type="radio" name="q1" value="ciencias"> Resolver problemas científicos<br>
+    <input type="radio" name="q1" value="arte"> Crear obras artísticas<br>
+    <input type="radio" name="q1" value="social"> Ayudar a otras personas<br>
+    <input type="radio" name="q1" value="Medicina"> Curar<br>
+  </div>
+
+  <div class="question">
+    <p>2. ¿Qué materia te gusta más?</p>
+    <input type="radio" name="q2" value="ciencias"> Matemáticas o física<br>
+    <input type="radio" name="q2" value="arte"> Arte o diseño<br>
+    <input type="radio" name="q2" value="social"> Psicología o filosofía<br>
+    <input type="radio" name="q2" value="Medicina"> Medicina<br>
+  </div>
+
+  <div class="question">
+    <p>3. ¿Qué actividad prefieres en tu tiempo libre?</p>
+    <input type="radio" name="q3" value="ciencias"> Juegos de lógica o experimentos<br>
+    <input type="radio" name="q3" value="arte"> Dibujar, escribir o tocar música<br>
+    <input type="radio" name="q3" value="social"> Conversar o apoyar a amigos<br>
+    <input type="radio" name="q3" value="Medicina"> No se ayudar gente<br>
+  </div>
+
+  <div class="question">
+    <p>4. ¿Qué actividad prefieres en tu tiempo libre?</p>
+    <input type="radio" name="q4" value="ciencias"> Juegos de lógica o experimentos<br>
+    <input type="radio" name="q4" value="arte"> Dibujar, escribir o tocar música<br>
+    <input type="radio" name="q4" value="social"> Conversar o apoyar a amigos<br>
+    <input type="radio" name="q4" value="Medicina"> No se ayudar gente<br>
+  </div>
+
+  <div class="question">
+    <p>5. ¿Qué actividad prefieres en tu tiempo libre?</p>
+    <input type="radio" name="q5" value="ciencias"> Juegos de lógica o experimentos<br>
+    <input type="radio" name="q5" value="arte"> Dibujar, escribir o tocar música<br>
+    <input type="radio" name="q5" value="social"> Conversar o apoyar a amigos<br>
+    <input type="radio" name="q5" value="Medicina"> No se ayudar gente<br>
+  </div>
+
+  <div class="question">
+    <p>6. ¿Qué actividad prefieres en tu tiempo libre?</p>
+    <input type="radio" name="q6" value="ciencias"> Juegos de lógica o experimentos<br>
+    <input type="radio" name="q6" value="arte"> Dibujar, escribir o tocar música<br>
+    <input type="radio" name="q6" value="social"> Conversar o apoyar a amigos<br>
+    <input type="radio" name="q6" value="Medicina"> No se ayudar gente<br>
+  </div>
+  <!-- Puedes seguir duplicando bloques .question -->
+
+  <button onclick="calcular()">Ver resultado</button>
+</div>
+
+<div id="resultado">
+  <h2>Resultado</h2>
+  <p id="texto-resultado"></p>
+  <canvas id="grafico" width="400" height="200"></canvas>
+</div>
+
+<script>
+  function calcular() {
+    const respuestas = {
+      ciencias: 0,
+      arte: 0,
+      social: 0,
+      Medicina: 0
+    };
+
+    const preguntas = document.querySelectorAll('.question');
+
+    for (let i = 0; i < preguntas.length; i++) {
+      const seleccionada = preguntas[i].querySelector('input[type="radio"]:checked');
+      if (!seleccionada) {
+        alert(`Por favor responde la pregunta ${i + 1} antes de continuar.`);
+        return;
+      }
+      respuestas[seleccionada.value]++;
+    }
+
+    // Resultado principal
+    const max = Math.max(...Object.values(respuestas));
+    const area = Object.keys(respuestas).find(key => respuestas[key] === max);
+    let resultado = "";
+
+    if (area === "ciencias") resultado = "Tu perfil es científico o técnico.";
+    if (area === "arte") resultado = "Tu perfil es creativo o artístico.";
+    if (area === "social") resultado = "Tu perfil es social o humanista.";
+    if (area === "Medicina") resultado = "Tu perfil es Medicina."
+
+    // Mostrar resultado
+    document.getElementById("quiz").style.display = "none";
+    document.getElementById("resultado").style.display = "block";
+    document.getElementById("texto-resultado").innerText = resultado;
+
+    // Mostrar gráfica
+    const ctx = document.getElementById('grafico').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Ciencias', 'Arte', 'Social','Medicina'],
+        datasets: [{
+          label: 'Afinidad por área',
+          data: [respuestas.ciencias, respuestas.arte, respuestas.social,respuestas.Medicina],
+          backgroundColor: ['#3b82f6', '#f59e0b', '#10b981','#10b981']
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
